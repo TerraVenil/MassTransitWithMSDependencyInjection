@@ -52,7 +52,21 @@ namespace MassTransitWithMSDependencyInjection
 
                     configuration.ConfigurePublish(x => x.UseSendExecute(context =>
                     {
+                        PublishContext publishContext;
+                        SendContext sendContext;
                         if (context.TryGetPayload(out ConsumeContext _))
+                        {
+                            var correlationScoped = s.GetService<ICorrelationScoped>();
+                            context.Headers.Set("CorrelationIdSсoped", correlationScoped.CorrelationId);
+                        }
+
+                        if (context.TryGetPayload(out publishContext))
+                        {
+                            var correlationScoped = s.GetService<ICorrelationScoped>();
+                            context.Headers.Set("CorrelationIdSсoped", correlationScoped.CorrelationId);
+                        }
+
+                        if (context.TryGetPayload(out sendContext))
                         {
                             var correlationScoped = s.GetService<ICorrelationScoped>();
                             context.Headers.Set("CorrelationIdSсoped", correlationScoped.CorrelationId);
